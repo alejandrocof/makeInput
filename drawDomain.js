@@ -118,13 +118,15 @@ function drawDomain(){
 		];
 		cells.push( L.polygon(latlngs, {color: 'gray', pane: 'domain'}).addTo(map) );
 		
+		lat0=latRot-0.5*ndy+0.5*dy;
+		lng0=lngRot-0.5*ndx+0.5*dx;
 		var inilatlngs = [
-			rotPoint( new L.LatLng(latRot, lngRot), new L.LatLng(latRot-0.5*ndy, lngRot-0.5*ndx), theta),
-			rotPoint( new L.LatLng(latRot, lngRot), new L.LatLng(latRot-0.5*ndy, lngRot-0.5*ndx+dx), theta),
-			rotPoint( new L.LatLng(latRot, lngRot), new L.LatLng(latRot-0.5*ndy+dy, lngRot-0.5*ndx+dx), theta),
-			rotPoint( new L.LatLng(latRot, lngRot), new L.LatLng(latRot-0.5*ndy+dy, lngRot-0.5*ndx), theta)
+				rotPoint( new L.LatLng(latRot, lngRot), new L.LatLng(lat0-0.5*dy, lng0-0.5*dx), theta),
+				rotPoint( new L.LatLng(latRot, lngRot), new L.LatLng(lat0-0.5*dy, lng0+0.5*dx), theta),
+				rotPoint( new L.LatLng(latRot, lngRot), new L.LatLng(lat0+0.5*dy, lng0+0.5*dx), theta),
+				rotPoint( new L.LatLng(latRot, lngRot), new L.LatLng(lat0+0.5*dy, lng0-0.5*dx), theta)
 		];
-		cells.push(  L.polygon(inilatlngs, {color: 'blue', pane: 'domain'}).addTo(map) );
+		cells.push(  L.polygon(inilatlngs, {color: 'blue', pane: 'celdas'}).bindPopup(`Origen<br>Lat: ${lat0}<br>lng: ${lng0}<br>(0,0)`).addTo(map) );
 		
 		//points of interest
 		var POI = estaciones.map(function(obj) {
@@ -132,17 +134,22 @@ function drawDomain(){
 		});
 		POI.push({lat: arraySlip[0][Nx-1].pos.lat, lng: arraySlip[0][Nx-1].pos.lng, label: "Celda Slip", i:10, j:0})
 		
-		POI.forEach( ({lat,lng,label,i,j})=>{
-			console.log(lat,lng,label,i,j)
-			lat1=latRot-0.5*ndy;
-			lng1=lngRot-0.5*ndx;
+		
+		POI.forEach( ({lat,lng,label})=>{
+			const origin=rotPoint( new L.LatLng(latRot, lngRot), new L.LatLng(lat0, lng0), theta);
+			const {lat:latj,lng:lngi} = rotPoint( origin, new L.LatLng(lat, lng), -theta);
+			i = parseInt( Math.round( (lngi - origin.lng)/dx) );
+			j = parseInt( Math.round( (latj - origin.lat)/dy) );
+			POI['i']=i;
+			POI['j']=j;
+			//console.log(lat,lng,label,i,j,latj,lngi,j,i);
 			var inilatlngs = [
-				rotPoint( new L.LatLng(latRot, lngRot), new L.LatLng(latRot-0.5*ndy+j*dy, lngRot-0.5*ndx+i*dx), theta),
-				rotPoint( new L.LatLng(latRot, lngRot), new L.LatLng(latRot-0.5*ndy+j*dy, lngRot-0.5*ndx+dx+i*dx), theta),
-				rotPoint( new L.LatLng(latRot, lngRot), new L.LatLng(latRot-0.5*ndy+dy+j*dy, lngRot-0.5*ndx+dx+i*dx), theta),
-				rotPoint( new L.LatLng(latRot, lngRot), new L.LatLng(latRot-0.5*ndy+dy+j*dy, lngRot-0.5*ndx+i*dx), theta)
+				rotPoint( new L.LatLng(latRot, lngRot), new L.LatLng(lat0+j*dy-0.5*dy, lng0+i*dx-0.5*dx), theta),
+				rotPoint( new L.LatLng(latRot, lngRot), new L.LatLng(lat0+j*dy-0.5*dy, lng0+i*dx+0.5*dx), theta),
+				rotPoint( new L.LatLng(latRot, lngRot), new L.LatLng(lat0+j*dy+0.5*dy, lng0+i*dx+0.5*dx), theta),
+				rotPoint( new L.LatLng(latRot, lngRot), new L.LatLng(lat0+j*dy+0.5*dy, lng0+i*dx-0.5*dx), theta)
 			];
-			cells.push(  L.polygon(inilatlngs, {color: 'red', pane: 'domain'}).bindPopup(`${label}<br>Lat: ${lat}<br>lng: ${lng}<br>(${i},${j})`).addTo(map) );
+			cells.push(  L.polygon(inilatlngs, {color: 'red', pane: 'celdas'}).bindPopup(`${label}<br>Lat: ${lat}<br>lng: ${lng}<br>(${i},${j})`).addTo(map) );
 		})
 		
 		

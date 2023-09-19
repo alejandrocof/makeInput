@@ -1,9 +1,11 @@
 const map = L.map('map').setView([23.6260333, -102.5375005], 5);
+map.createPane('celdas');
 map.createPane('slip');
 map.createPane('domain');
 
-map.getPane('slip').style.zIndex = 500;
-map.getPane('domain').style.zIndex = 400;
+map.getPane('celdas').style.zIndex = 300;
+map.getPane('slip').style.zIndex = 200;
+map.getPane('domain').style.zIndex = 100;
 map.getPane('domain').style.pointerEvents = 'none';
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
