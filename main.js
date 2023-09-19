@@ -3,9 +3,10 @@ map.createPane('celdas');
 map.createPane('slip');
 map.createPane('domain');
 
-map.getPane('celdas').style.zIndex = 300;
-map.getPane('slip').style.zIndex = 200;
-map.getPane('domain').style.zIndex = 100;
+//poner capas arriba de 100(mapa) y debajo de 500(marcadores)
+map.getPane('celdas').style.zIndex = 400;
+map.getPane('slip').style.zIndex = 300;
+map.getPane('domain').style.zIndex = 200;
 map.getPane('domain').style.pointerEvents = 'none';
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
