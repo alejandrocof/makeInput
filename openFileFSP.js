@@ -73,7 +73,7 @@ file.addEventListener("change", function () {
 		});
 		//console.log(arraySlip);
 		console.log(variables);
-		setRot(variables['Mech']['STRK']);
+		setRot(variables['Mech']['STRK']-270);
 		DIP=variables['Mech']['DIP'];
 		RAKE=variables['Mech']['RAKE'];
 		

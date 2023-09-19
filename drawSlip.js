@@ -112,8 +112,7 @@ function drawSlip(){
 						I2=I3=i-1;
 						alpha2=alpha3=1.5;
 					}
-					const slip=arraySlip[j][i].slip
-					const Z=arraySlip[j][i].Z
+					const {slip, lat, lon, Z}=arraySlip[j][i]
 					const p1 = interpola( alpha1, beta1, arraySlip[J1-1][I1-1].pos, arraySlip[J1-1][I1].pos,   arraySlip[J1][I1].pos,     arraySlip[J1][I1-1].pos);
 					const p2 = interpola( alpha2, beta2, arraySlip[J2-1][I2].pos,   arraySlip[J2-1][I2+1].pos, arraySlip[J2][I2+1].pos,   arraySlip[J2][I2].pos);
 					const p3 = interpola( alpha3, beta3, arraySlip[J3][I3].pos,     arraySlip[J3][I3+1].pos,   arraySlip[J3+1][I3+1].pos, arraySlip[J3+1][I3].pos);
@@ -122,7 +121,7 @@ function drawSlip(){
 					let weight=0.1;
 					if(i==0 && j==0)weight=0.8;
 					var latlngs = [p1,p2,p3,p4];
-					slipGroup[ i+j*variables['Invs']['Nx'] ] = L.polygon(latlngs, { fillColor: `rgb(${r}, ${g}, ${b})`,color: 'black',weight: weight, fillOpacity: .75, pane: 'slip' }).bindPopup(`Slip: ${slip}m<br>Z: ${Z}`).addTo(map);
+					slipGroup[ i+j*variables['Invs']['Nx'] ] = L.polygon(latlngs, { fillColor: `rgb(${r}, ${g}, ${b})`,color: 'black',weight: weight, fillOpacity: .75, pane: 'slip' }).bindPopup(`Slip: ${slip}m<br>Lat: ${lat}<br>lng: ${lon}<br>Z: ${Z}`).addTo(map);
 					//map.fitBounds(polygon.getBounds());
 				}
 			}
@@ -133,7 +132,7 @@ function drawSlip(){
 			betaDrawing.push(arraySlip[0][0].pos)
 			let N=100
 			for(let i=0; i<=N;i++){
-				alpha=Math.PI*(90-variables["Mech"]["STRK"]+STR*i/N)/180.0;
+				alpha=Math.PI*(360-variables["Mech"]["STRK"]+90+STR*i/N)/180.0;
 				alphaDrawing.push( new L.LatLng(arraySlip[0][0].pos.lat+0.12*Math.sin(alpha),arraySlip[0][0].pos.lng+0.12*Math.cos(alpha)) )
 				beta=Math.PI*(90-variables["Mech"]["STRK"]*i/N)/180.0;
 				betaDrawing.push( new L.LatLng(arraySlip[0][0].pos.lat+0.1*Math.sin(beta),arraySlip[0][0].pos.lng+0.1*Math.cos(beta)) )
@@ -142,7 +141,7 @@ function drawSlip(){
 			slipGroup.push(
 				L.polygon(alphaDrawing, {color: 'rgb(255,128,128)', pane: 'slip' })
 				.bindPopup(`Strike (input): ${Number(STR).toFixed(1)}`).addTo(map));
-			alpha=Math.PI*(90-variables["Mech"]["STRK"]+STR)/180.0;
+			alpha=Math.PI*(360-variables["Mech"]["STRK"]+90+STR)/180.0;
 			slipGroup.push(
 				L.polyline([arraySlip[0][0].pos,new L.LatLng(arraySlip[0][0].pos.lat+0.15*Math.sin(alpha),arraySlip[0][0].pos.lng+0.15*Math.cos(alpha))],
 				{color: 'red', pane: 'slip' })
