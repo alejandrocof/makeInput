@@ -2,7 +2,8 @@ let file = document.getElementById("openFile");
 
 let variables={};
 let arraySlip=[];
-let maxSlip=0
+let maxSlip=0.0;
+let sSlip=0.0;
 
 
 file.addEventListener("change", function () {
@@ -47,6 +48,7 @@ file.addEventListener("change", function () {
 					if(i==0){
 						if(j==0){
 							maxSlip=0
+							sSlip=0
 							arraySlip=new Array(Nz);
 							//console.log("j=0 Nz=",Nz);
 						}
@@ -54,13 +56,16 @@ file.addEventListener("change", function () {
 						//console.log("i=0 Nx=",Nx);
 					}
 					const segmentos = linea.split(/\s+/).filter(cadena => cadena.trim() !== '');
-					lat = parseFloat( segmentos[0] );
-					lon = parseFloat( segmentos[1] );
+					//lat = parseFloat( segmentos[0] );
+					//lon = parseFloat( segmentos[1] );
 					pos = new L.LatLng( parseFloat( segmentos[0] ), parseFloat( segmentos[1] ) )
+					Z = parseFloat( segmentos[4] );
 					slip = parseFloat( segmentos[5] );
 					maxSlip=Math.max(slip,maxSlip)
-					Z = parseFloat( segmentos[4] );
-					arraySlip[j][i]={'lat':lat,'lon':lon,'pos':pos,'slip':slip, 'Z':Z};
+					sSlip+=slip;
+					
+					//arraySlip[j][i]={'lat':lat,'lon':lon,'pos':pos,'slip':slip, 'Z':Z};
+					arraySlip[j][i]={'pos':pos,'slip':slip, 'Z':Z};
 					i++;
 					if(i>=variables['Invs']['Nx']){
 						i=0;
@@ -76,7 +81,48 @@ file.addEventListener("change", function () {
 		setRot(variables['Mech']['STRK']-270);
 		DIP=variables['Mech']['DIP'];
 		RAKE=variables['Mech']['RAKE'];
+		//SLIP=sSlip/(Nx*Nz);
+		SLIP=maxSlip;
+		NDEPTH=nz-2;
 		
+		//IXPOS = parseInt( Math.round( nx/2 ) );
+		//IYPOS = parseInt( Math.round( ny/2 ) );
+		
+		NBGX=1;
+		NEDX=nx;
+		NSKPX=1;
+		
+		NBGY=1;
+		NEDY=ny;
+		NSKPY=1;
+		
+		NBGZ=nz-2;
+		NEDZ=nz-2;
+		NSKPZ=1;
+		
+		
+		NTISKP=1;
+		
+		/*
+		NDAMP=25;
+		IFRE=0;
+		NSV=0;
+		VIS3D=1;
+		fo=1;
+		NSTR=0;
+		
+		vitesseRupture=0;
+		DXRupture=0;
+		dtRupture=0;
+		nTimeStepsRupture=0;
+		factorDeReduccionDelSlip=0;
+		lengthInNumberOfSteps=0;
+		widthInNumberOfSteps=0;
+		xHypocenterIdem=0;
+		yHypocenterIdem=0;
+		durationEnSegundos=0;
+		riseTime=0;
+*/
 		drawDomain();
 		drawSlip();
 		drawHyp();
