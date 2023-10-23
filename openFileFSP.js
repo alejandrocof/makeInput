@@ -3,7 +3,16 @@ let file = document.getElementById("openFile");
 let variables={};
 let arraySlip=[];
 let maxSlip=0.0;
-let sSlip=0.0;
+let maxRAKE=0.0;
+let maxTRUPE=0.0;
+let maxRISE=0.0;
+let maxSF_MOMENT=0.0;
+let max={};
+let min={};
+var Nx=0;
+var Nz=0;
+
+//let sSlip=0.0;
 
 
 file.addEventListener("change", function () {
@@ -45,27 +54,60 @@ file.addEventListener("change", function () {
 				Nz=variables['Invs']['Nz'];
 				if(i<Nx && j<Nz){
 					//console.log("i:",i,"j:",j);
+					const segmentos = linea.split(/\s+/).filter(cadena => cadena.trim() !== '');
+					pos = new L.LatLng( parseFloat( segmentos[0] ), parseFloat( segmentos[1] ) )
+					const X = parseFloat( segmentos[2] );
+					const Y = parseFloat( segmentos[3] );
+					const Z = parseFloat( segmentos[4] );
+					const SLIP = parseFloat( segmentos[5] );
+					const RAKE = parseFloat( segmentos[6] );
+					const TRUP = parseFloat( segmentos[7] );
+					const RISE = parseFloat( segmentos[8] );
+					const SF_MOMENT = parseFloat( segmentos[9] );
+					
+					
 					if(i==0){
 						if(j==0){
-							maxSlip=0
-							sSlip=0
+							min['X']=max['X']=X;
+							min['Y']=max['Y']=Y;
+							min['Z']=max['Z']=Z;
+							min['SLIP']=max['SLIP']=SLIP;
+							min['RAKE']=max['RAKE']=RAKE;
+							min['TRUP']=max['TRUP']=TRUP;
+							min['RISE']=max['RISE']=RISE;
+							min['SF_MOMENT']=max['SF_MOMENT']=SF_MOMENT;
+							//sSlip=0
 							arraySlip=new Array(Nz);
 							//console.log("j=0 Nz=",Nz);
 						}
 						arraySlip[j]=new Array(Nx);
 						//console.log("i=0 Nx=",Nx);
 					}
-					const segmentos = linea.split(/\s+/).filter(cadena => cadena.trim() !== '');
-					//lat = parseFloat( segmentos[0] );
-					//lon = parseFloat( segmentos[1] );
-					pos = new L.LatLng( parseFloat( segmentos[0] ), parseFloat( segmentos[1] ) )
-					Z = parseFloat( segmentos[4] );
-					slip = parseFloat( segmentos[5] );
-					maxSlip=Math.max(slip,maxSlip)
-					sSlip+=slip;
+					else{
+						min['X'] = Math.min(X,min['X']);
+						min['Y'] = Math.min(Y,min['Y']);
+						min['Z'] = Math.min(Z,min['Z']);
+						min['SLIP'] = Math.min(SLIP,min['SLIP']);
+						min['RAKE'] = Math.min(RAKE,min['RAKE']);
+						min['TRUP'] = Math.min(TRUP,min['TRUP']);
+						min['RISE'] = Math.min(RISE,min['RISE']);
+						min['SF_MOMENT'] = Math.min(SF_MOMENT,min['SF_MOMENT']);
+						
+						max['X'] = Math.max(X,max['X']);
+						max['Y'] = Math.max(Y,max['Y']);
+						max['Z'] = Math.max(Z,max['Z']);
+						max['SLIP'] = Math.max(SLIP,max['SLIP']);
+						max['RAKE'] = Math.max(RAKE,max['RAKE']);
+						max['TRUP'] = Math.max(TRUP,max['TRUP']);
+						max['RISE'] = Math.max(RISE,max['RISE']);
+						max['SF_MOMENT'] = Math.max(SF_MOMENT,max['SF_MOMENT']);
+					}
+					
+					
 					
 					//arraySlip[j][i]={'lat':lat,'lon':lon,'pos':pos,'slip':slip, 'Z':Z};
-					arraySlip[j][i]={'pos':pos,'slip':slip, 'Z':Z};
+					arraySlip[j][i]={'pos':pos,'SLIP':SLIP, 'X':X, 'Y':Y, 'Z':Z,
+					'RAKE':RAKE, 'TRUP':TRUP, 'RISE':RISE, 'SF_MOMENT':SF_MOMENT};
 					i++;
 					if(i>=variables['Invs']['Nx']){
 						i=0;
@@ -78,7 +120,7 @@ file.addEventListener("change", function () {
 		});
 		//console.log(arraySlip);
 		console.log(variables);
-		setRot(variables['Mech']['STRK']-270);
+		setRot((variables['Mech']['STRK']-270+360)%360);
 		DIP=variables['Mech']['DIP'];
 		RAKE=variables['Mech']['RAKE'];
 		//SLIP=sSlip/(Nx*Nz);

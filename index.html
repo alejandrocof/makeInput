@@ -21,73 +21,90 @@
 		
 		
 		<div id="idDomain">
-			<div class="center">
+			<div>
 				<!--input type="file" id="openFile" accept=".fsp" style="margin-bottom:10px" /-->
-				<input type="file" id="openFile" accept=".fsp" style="margin-top:10px"/>
+				<!--input type="file" id="openFile" accept=".fsp" style="margin-top:10px"/-->
+				<input type="file" id="openFile" accept=".fsp" style="margin:10px"/>
 			</div>
 			<hr>
-			<div class="center">
-				<label>NT: </label>
-				<input id="idNTNumber" type="number" min=1 max=10000 step=1 style="width: 4em"/>
-				<input id="idNTInput" type="range" min=1 max=10000 step=1>
+			<div>
+				<label id="idNTLabel" >NT:
+					<input id="idNTNumber" type="number" min=1 max=10000 step=1 style="width: 4em"/>
+					<input id="idNTInput" type="range" min=1 max=10000 step=1>
+				</label>
 			</div>
-			<div class="center">
-				<label>DT: </label>
+			<div>
+				<label>DT:
 				<input id="idDTNumber" type="number" min=0.001 max=1 step=0.001 style="width: 4em"/>
 				<input id="idDTInput" type="range" min=0.001 max=1 step=0.001>
+				</label>
 			</div>
 			<hr>
-			<div class="center">
-				<label>nx: </label>
-				<input id="idNxNumber" type="number" min=1 max=2000 step=1 style="width: 4em"/>
-				<input id="idNxInput" type="range" min=1 max=2000 step=1>
+			<div>
+				<label>nx:
+					<input id="idNxNumber" type="number" min=1 max=2000 step=1 style="width: 4em"/>
+					<input id="idNxInput" type="range" min=1 max=2000 step=1>
+				</label>
 			</div>
-			<div class="center">
-				<label>ny: </label>
-				<input id="idNyNumber" type="number" min=1 max=2000 step=1 style="width: 4em"/>
-				<input id="idNyInput" type="range" min=1 max=2000 step=1>
+			<div>
+				<label>ny:
+					<input id="idNyNumber" type="number" min=1 max=2000 step=1 style="width: 4em"/>
+					<input id="idNyInput" type="range" min=1 max=2000 step=1>
+				</label>
 			</div>
-			<div class="center">
-				<label>nz: </label>
-				<input id="idNzNumber" type="number" min=1 max=2000 step=1 style="width: 4em"/>
-				<input id="idNzInput" type="range" min=1 max=2000 step=1>
+			<div>
+				<label>nz:
+					<input id="idNzNumber" type="number" min=1 max=2000 step=1 style="width: 4em"/>
+					<input id="idNzInput" type="range" min=1 max=2000 step=1>
+				</label>
 			</div>
-			<div class="center">
-				<label>DH: </label>
-				<input id="idDHNumber" type="number" min=0 max=3000 step=1 style="width: 4em"/>
-				<label>m</label>
-				<input id="idDHInput" type="range" min=0 max=3000 step=1>
-			</div>
-			<hr>
-			<div class="center">
-				<label>ngx: </label>
-				<input id="idNgxNumber" type="number" min=1 max=16 step=1 style="width: 4em"/>
-				<input id="idNgxInput" type="range" min=1 max=16 step=1>
-			</div>
-			<div class="center">
-				<label>ngy: </label>
-				<input id="idNgyNumber" type="number" min=1 max=16 step=1 style="width: 4em"/>
-				<input id="idNgyInput" type="range" min=1 max=16 step=1>
-			</div>
-			<div class="center">
-				<label>ngz: </label>
-				<input id="idNgzNumber" type="number" min=1 max=16 step=1 style="width: 4em"/>
-				<input id="idNgzInput" type="range" min=1 max=16 step=1>
+			<div>
+				<label>DH:
+					<input id="idDHNumber" type="number" min=0 max=3000 step=1 style="width: 4em"/>
+				</label>
+				<label>m
+					<input id="idDHInput" type="range" min=0 max=3000 step=1>
+				</label>
 			</div>
 			<hr>
-			<div class="center">
-				<label>Rotación del dominio: </label><br>
-				<label>Theta: </label>
-				<input id="idRotNumber" type="number" min=0 max=360 step=0.1 style="width: 4em"/>
-				<input id="idRotInput" type="range" min=0 max=360 step=0.1><br>
-				<label id="idStrike" >STRIKE (fsp): </label><br>
-				<label id="idStr" >STR (input): </label>
+			<div>
+				<label>ngx:
+					<input id="idNgxNumber" type="number" min=1 max=16 step=1 style="width: 4em"/>
+					<input id="idNgxInput" type="range" min=1 max=16 step=1>
+				</label>
+			</div>
+			<div>
+				<label>ngy:
+					<input id="idNgyNumber" type="number" min=1 max=16 step=1 style="width: 4em"/>
+					<input id="idNgyInput" type="range" min=1 max=16 step=1>
+				</label>
+			</div>
+			<div>
+				<label>ngz:
+					<input id="idNgzNumber" type="number" min=1 max=16 step=1 style="width: 4em"/>
+					<input id="idNgzInput" type="range" min=1 max=16 step=1>
+				</label>
 			</div>
 			<hr>
-			<h3>input:</h3>
-			<pre id="idFileInputPre"></pre>
+			<div>
+				Rotación del dominio:<br>
+				<label>Theta:
+					<input id="idRotNumber" type="number" min=0 max=360 step=0.1 style="width: 4em"/>
+					<input id="idRotInput" type="range" min=0 max=360 step=0.1><br>
+				</label>
+				<div id="idStrike" >STRIKE (fsp): </div>
+				<div id="idStr" >STR (input): </div>
+			</div>
+			<hr>
+			<div>
+				<canvas id = "my_Canvas"></canvas>
+			</div>
+			<hr>
+			<div id="contentDiv">
+				<h3>input:</h3>
+				<pre id="idFileInputPre"></pre>
+			</div>
 		</div>
-		
 	</div>
 </div>
 
@@ -96,7 +113,10 @@
 <script src="Estaciones.js"></script>
 <script src="openFileFSP.js"></script>
 <script src="drawSlip.js"></script>
+<script src="cube.js"></script>
 <script src="drawDomain.js"></script>
+
+
 
 
 </body>

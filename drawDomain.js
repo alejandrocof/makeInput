@@ -183,14 +183,25 @@ function drawDomain(){
 
 		cells.push( Points.ij2cell( 1, 1, `Origen<br>Lat: ${lat0}<br>lng: ${lng0}`) );
 		cells.push( Points.ij2cell( nx, 1, 'Fin X') );
+		cells.push( Points.ij2cell( 1, ny, 'Fin Y') );
 		cells.push( Points.ij2cell( nx, ny, 'Fin X Y') );
 		
 		//for(let k=0;k<Nx;k++){
 		//	cells.push( Points.latlng2cell( arraySlip[0][k].pos.lat, arraySlip[0][k].pos.lng,
 		//	`Celda slip<br>lat: ${arraySlip[0][k].pos.lat}<br>lng: ${arraySlip[0][k].pos.lng}<br>Z: ${arraySlip[0][k].Z} km` ) );
 		//}
+		
+		cells.push( Points.latlng2cell( arraySlip[0][0].pos.lat, arraySlip[0][0].pos.lng,
+		`Celda slip<br>lat: ${arraySlip[0][0].pos.lat}<br>lng: ${arraySlip[0][0].pos.lng}<br>Z: ${arraySlip[0][0].Z} km` ) );
+		
 		cells.push( Points.latlng2cell( arraySlip[0][Nx-1].pos.lat, arraySlip[0][Nx-1].pos.lng,
 		`Celda slip<br>lat: ${arraySlip[0][Nx-1].pos.lat}<br>lng: ${arraySlip[0][Nx-1].pos.lng}<br>Z: ${arraySlip[0][Nx-1].Z} km` ) );
+		
+		cells.push( Points.latlng2cell( arraySlip[Nz-1][Nx-1].pos.lat, arraySlip[Nz-1][Nx-1].pos.lng,
+		`Celda slip<br>lat: ${arraySlip[Nz-1][Nx-1].pos.lat}<br>lng: ${arraySlip[Nz-1][Nx-1].pos.lng}<br>Z: ${arraySlip[Nz-1][Nx-1].Z} km` ) );
+		
+		cells.push( Points.latlng2cell( arraySlip[Nz-1][0].pos.lat, arraySlip[Nz-1][0].pos.lng,
+		`Celda slip<br>lat: ${arraySlip[Nz-1][0].pos.lat}<br>lng: ${arraySlip[Nz-1][0].pos.lng}<br>Z: ${arraySlip[Nz-1][0].Z} km` ) );
 	//	cells.push( Points.latlng2cell( arraySlip[0][0].pos.lat, arraySlip[0][0].pos.lng,
 		//`Celda slip<br>lat: ${arraySlip[0][0].pos.lat}<br>lng: ${arraySlip[0][0].pos.lng}<br>Z: ${arraySlip[0][0].Z} km` ) );
 		
@@ -315,6 +326,7 @@ setNx=( value )=>{
 	idNxNumber.value=nx;
 	idNxInput.value=nx;
 	drawDomain();
+	draw3DSlip();
 }
 setNx(100);
 
@@ -330,6 +342,7 @@ setNy=( value )=>{
 	idNyNumber.value=ny;
 	idNyInput.value=ny;
 	drawDomain();
+	draw3DSlip();
 }
 setNy(100);
 
@@ -347,6 +360,7 @@ setNz=( value )=>{
 	idNzNumber.value=nz;
 	idNzInput.value=nz;
 	drawDomain();
+	draw3DSlip();
 }
 setNz(100);
 
@@ -423,7 +437,7 @@ idRotInput.oninput = (slider) => {
 setRot=( value )=>{
 	Rot=value;
 	if('Mech' in variables){
-		STR=(variables['Mech']['STRK']-270-value);
+		STR=((variables['Mech']['STRK']-270-value)+360)%360;
 		idStrike.textContent=`STRIKE (fsp): ${Number(variables["Mech"]["STRK"]).toFixed(1)}`;
 		idStr.textContent=`STR (input): ${Number(STR).toFixed(1)}`;
 	}

@@ -65,96 +65,102 @@ function drawHyp(){
 	if( hyp ){
 		map.removeLayer(hyp);
 	}
-	hyp = L.marker([variables["Loc"]["LAT"], variables["Loc"]["LON"]], {icon: marcadorAmarilloIcon}).bindPopup(variables['Event']).addTo(map);
+	hyp = L.marker([variables["Loc"]["LAT"], variables["Loc"]["LON"]], {icon: marcadorAmarilloIcon}).bindPopup(`${variables['Event']}<br>Lat: ${variables["Loc"]["LAT"]}<br>lng: ${variables["Loc"]["LON"]}<br>DEP: ${variables["Loc"]["DEP"]}`).addTo(map);
 	map.setView([variables["Loc"]["LAT"], variables["Loc"]["LON"]], 7);
 }
 
 function drawSlip(){
 
 	if( !(Object.keys(variables).length === 0) ){
-	//console.log(variables);
-	if( slipGroup.length != 0 ){
-		slipGroup.forEach( (sg)=>map.removeLayer(sg));
-		slipGroup=null;
-	}
-	Nz=variables['Invs']['Nz']
-	Nx=variables['Invs']['Nx']
-	slipGroup=new Array( Nz*Nx );
-	
-	/*
-	for (let j = 0; j < Nz; j++ )
-		for (let i = 0; i < Nx; i++ ) {
-			const {lat,lon,slip}=arraySlip[j][i];
-			const {r,g,b}=getColor(slip/maxSlip,colorMapSlip);
-			slipGroup[ i+j*variables['Invs']['Nx'] ] = L.circle([lat, lon], {radius: 200, color: `rgb(${r}, ${g}, ${b})`}).bindPopup(`${slip}m`).addTo(map);
+		//console.log(variables);
+		if( slipGroup.length != 0 ){
+			slipGroup.forEach( (sg)=>map.removeLayer(sg));
+			slipGroup=null;
 		}
-	*/
-	
-	for(let j=0; j<Nz; j++ ){
-				J1=J2=J3=J4=j;
-				beta1=beta2=beta3=beta4=0.5;
-				if(j==0){
-					J1=J2=j+1;
-					beta1=beta2=-0.5;
-				}
-				if(j==Nz-1){
-					J3=J4=j-1;
-					beta3=beta4=1.5;
-				}
-				for(let i=0; i<Nx; i++ ){
-					I1=I2=I3=I4=i;
-					alpha1=alpha2=alpha3=alpha4=0.5;
-					if(i==0){
-						I1=I4=i+1;
-						alpha1=alpha4=-0.5;
-					}
-					if(i==Nx-1){
-						I2=I3=i-1;
-						alpha2=alpha3=1.5;
-					}
-					const {slip, lat, lon, Z}=arraySlip[j][i]
-					const p1 = interpola( alpha1, beta1, arraySlip[J1-1][I1-1].pos, arraySlip[J1-1][I1].pos,   arraySlip[J1][I1].pos,     arraySlip[J1][I1-1].pos);
-					const p2 = interpola( alpha2, beta2, arraySlip[J2-1][I2].pos,   arraySlip[J2-1][I2+1].pos, arraySlip[J2][I2+1].pos,   arraySlip[J2][I2].pos);
-					const p3 = interpola( alpha3, beta3, arraySlip[J3][I3].pos,     arraySlip[J3][I3+1].pos,   arraySlip[J3+1][I3+1].pos, arraySlip[J3+1][I3].pos);
-					const p4 = interpola( alpha4, beta4, arraySlip[J4][I4-1].pos,   arraySlip[J4][I4].pos,     arraySlip[J4+1][I4].pos,   arraySlip[J4+1][I4-1].pos);
-					const {r,g,b}=getColor(slip/maxSlip,colorMapSlip);
-					let weight=0.1;
-					if(i==0 && j==0)weight=0.8;
-					var latlngs = [p1,p2,p3,p4];
-					slipGroup[ i+j*variables['Invs']['Nx'] ] = L.polygon(latlngs, { fillColor: `rgb(${r}, ${g}, ${b})`,color: 'black',weight: weight, fillOpacity: .75, pane: 'slip' }).bindPopup(`Slip: ${slip}m<br>Lat: ${lat}<br>lng: ${lon}<br>Z: ${Z}`).addTo(map);
-					//map.fitBounds(polygon.getBounds());
-				}
+		Nz=variables['Invs']['Nz']
+		Nx=variables['Invs']['Nx']
+		slipGroup=new Array( Nz*Nx );
+		
+		/*
+		for (let j = 0; j < Nz; j++ )
+			for (let i = 0; i < Nx; i++ ) {
+				const {lat,lon,slip}=arraySlip[j][i];
+				const {r,g,b}=getColor(slip/maxSlip,colorMapSlip);
+				slipGroup[ i+j*variables['Invs']['Nx'] ] = L.circle([lat, lon], {radius: 200, color: `rgb(${r}, ${g}, ${b})`}).bindPopup(`${slip}m`).addTo(map);
 			}
-			alphaDrawing=[]
-			alphaDrawing.push(arraySlip[0][0].pos)
-			
-			betaDrawing=[]
-			betaDrawing.push(arraySlip[0][0].pos)
-			let N=100
-			for(let i=0; i<=N;i++){
-				alpha=Math.PI*(360-variables["Mech"]["STRK"]+90+STR*i/N)/180.0;
-				alphaDrawing.push( new L.LatLng(arraySlip[0][0].pos.lat+0.12*Math.sin(alpha),arraySlip[0][0].pos.lng+0.12*Math.cos(alpha)) )
-				beta=Math.PI*(90-variables["Mech"]["STRK"]*i/N)/180.0;
-				betaDrawing.push( new L.LatLng(arraySlip[0][0].pos.lat+0.1*Math.sin(beta),arraySlip[0][0].pos.lng+0.1*Math.cos(beta)) )
+		*/
+		
+		for(let j=Nz-1; j>=0; j-- ){
+			J1=J2=J3=J4=j;
+			beta1=beta2=beta3=beta4=0.5;
+			if(j==0){
+				J1=J2=j+1;
+				beta1=beta2=-0.5;
 			}
+			if(j==Nz-1){
+				J3=J4=j-1;
+				beta3=beta4=1.5;
+			}
+			for(let i=0; i<Nx; i++ ){
+				I1=I2=I3=I4=i;
+				alpha1=alpha2=alpha3=alpha4=0.5;
+				if(i==0){
+					I1=I4=i+1;
+					alpha1=alpha4=-0.5;
+				}
+				if(i==Nx-1){
+					I2=I3=i-1;
+					alpha2=alpha3=1.5;
+				}
+				const {slip, pos, Z}=arraySlip[j][i]
+				//SLIP RAKE TRUP RISE SF_MOMENT
+				
+				const variable='SLIP'
+				const p1 = interpola( alpha1, beta1, arraySlip[J1-1][I1-1].pos, arraySlip[J1-1][I1].pos,   arraySlip[J1][I1].pos,     arraySlip[J1][I1-1].pos);
+				const p2 = interpola( alpha2, beta2, arraySlip[J2-1][I2].pos,   arraySlip[J2-1][I2+1].pos, arraySlip[J2][I2+1].pos,   arraySlip[J2][I2].pos);
+				const p3 = interpola( alpha3, beta3, arraySlip[J3][I3].pos,     arraySlip[J3][I3+1].pos,   arraySlip[J3+1][I3+1].pos, arraySlip[J3+1][I3].pos);
+				const p4 = interpola( alpha4, beta4, arraySlip[J4][I4-1].pos,   arraySlip[J4][I4].pos,     arraySlip[J4+1][I4].pos,   arraySlip[J4+1][I4-1].pos);
+				const {r,g,b}=getColor(arraySlip[j][i][variable]/max[variable],colorMapSlip);
+				let weight=1.0;
+				let strokeColor='black';
+				if(i==0 && j==0)weight=2.0;
+				if(j==0)strokeColor='red';
+				var latlngs = [p1,p2,p3,p4];
+				slipGroup[ i+j*variables['Invs']['Nx'] ] = L.polygon(latlngs, { fillColor: `rgb(${r}, ${g}, ${b})`,color: strokeColor,weight: weight, fillOpacity: .75, pane: 'slip' }).bindPopup(`${variable}: ${arraySlip[j][i][variable]}<br>Lat: ${pos.lat}<br>lng: ${pos.lng}<br>Z: ${Z}`).addTo(map);
+				//map.fitBounds(polygon.getBounds());
+			}
+		}
+		alphaDrawing=[]
+		alphaDrawing.push(arraySlip[0][0].pos)
+		
+		betaDrawing=[]
+		betaDrawing.push(arraySlip[0][0].pos)
+		let N=100
+		for(let i=0; i<=N;i++){
+			alpha=Math.PI*(360-variables["Mech"]["STRK"]+90+STR*i/N)/180.0;
+			alphaDrawing.push( new L.LatLng(arraySlip[0][0].pos.lat+0.12*Math.sin(alpha),arraySlip[0][0].pos.lng+0.12*Math.cos(alpha)) )
+			beta=Math.PI*(90-variables["Mech"]["STRK"]*i/N)/180.0;
+			betaDrawing.push( new L.LatLng(arraySlip[0][0].pos.lat+0.1*Math.sin(beta),arraySlip[0][0].pos.lng+0.1*Math.cos(beta)) )
+		}
+		
+		slipGroup.push(
+			L.polygon(alphaDrawing, {color: 'rgb(255,128,128)', pane: 'slip' })
+			.bindPopup(`Strike (input): ${Number(STR).toFixed(1)}`).addTo(map));
+		alpha=Math.PI*(360-variables["Mech"]["STRK"]+90+STR)/180.0;
+		slipGroup.push(
+			L.polyline([arraySlip[0][0].pos,new L.LatLng(arraySlip[0][0].pos.lat+0.15*Math.sin(alpha),arraySlip[0][0].pos.lng+0.15*Math.cos(alpha))],
+			{color: 'red', pane: 'slip' })
+			.addTo(map));
+		
+		slipGroup.push(
+			L.polygon(betaDrawing, {color: 'rgb(128,128,128)', pane: 'slip' })
+			.bindPopup(`Strike (fsp): ${Number(variables["Mech"]["STRK"]).toFixed(1)}`).addTo(map));
+		beta=Math.PI*(90-variables["Mech"]["STRK"])/180.0;
+		slipGroup.push(
+			L.polyline([arraySlip[0][0].pos,new L.LatLng(arraySlip[0][0].pos.lat+0.15,arraySlip[0][0].pos.lng)],
+			{color: 'black', pane: 'slip' })
+			.addTo(map));
 			
-			slipGroup.push(
-				L.polygon(alphaDrawing, {color: 'rgb(255,128,128)', pane: 'slip' })
-				.bindPopup(`Strike (input): ${Number(STR).toFixed(1)}`).addTo(map));
-			alpha=Math.PI*(360-variables["Mech"]["STRK"]+90+STR)/180.0;
-			slipGroup.push(
-				L.polyline([arraySlip[0][0].pos,new L.LatLng(arraySlip[0][0].pos.lat+0.15*Math.sin(alpha),arraySlip[0][0].pos.lng+0.15*Math.cos(alpha))],
-				{color: 'red', pane: 'slip' })
-				.addTo(map));
-			
-			slipGroup.push(
-				L.polygon(betaDrawing, {color: 'rgb(128,128,128)', pane: 'slip' })
-				.bindPopup(`Strike (fsp): ${Number(variables["Mech"]["STRK"]).toFixed(1)}`).addTo(map));
-			beta=Math.PI*(90-variables["Mech"]["STRK"])/180.0;
-			slipGroup.push(
-				L.polyline([arraySlip[0][0].pos,new L.LatLng(arraySlip[0][0].pos.lat+0.15,arraySlip[0][0].pos.lng)],
-				{color: 'black', pane: 'slip' })
-				.addTo(map));
-			
+			draw3DSlip();
 	}
 }
