@@ -12,19 +12,20 @@ var vertexSlip_buffer={};
 var colorSlip_buffer={};
 var indexSlip_buffer={};
 
+
+var vertexGround=[-1,-1, 1,  1,-1, 1,  1, 1, 1, -1, 1, 1];
+var colorGround=[0.2,0.2,0.2,0.4, 0.2,0.2,0.2,0.4, 0.2,0.2,0.2,0.4, 0.2,0.2,0.2,0.4];
+var indexGround=[0,1,3, 2,3,1];
+
 var vertexCube=[-1,-1, 1,  1,-1, 1,  1, 1, 1, -1, 1, 1,
-                -1, 1,-1,  1, 1,-1,  1,-1,-1, -1,-1,-1,
-                -1,-1,-1,  1,-1,-1,  1,-1, 1, -1,-1, 1,
-                -1, 1, 1,  1, 1, 1,  1, 1,-1, -1, 1,-1,
-                -1, 1,-1, -1, 1, 1, -1,-1, 1, -1,-1,-1,
-                 1,-1,-1,  1,-1, 1,  1, 1, 1,  1, 1,-1];
-var colorCube=[0.2,1.0,0.2,0.4, 0.2,1.0,0.2,0.4, 0.2,1.0,0.2,0.4, 0.2,1.0,0.2,0.4,
-               1.0,0.2,0.2,0.4, 1.0,0.2,0.2,0.4, 1.0,0.2,0.2,0.4, 1.0,0.2,0.2,0.4,
-               1.0,1.0,1.0,0.2, 1.0,1.0,1.0,0.2, 1.0,1.0,1.0,0.2, 1.0,1.0,1.0,0.2,
-               1.0,1.0,1.0,0.2, 1.0,1.0,1.0,0.2, 1.0,1.0,1.0,0.2, 1.0,1.0,1.0,0.2,
-               1.0,1.0,1.0,0.2, 1.0,1.0,1.0,0.2, 1.0,1.0,1.0,0.2, 1.0,1.0,1.0,0.2,
-               1.0,1.0,1.0,0.2, 1.0,1.0,1.0,0.2, 1.0,1.0,1.0,0.2, 1.0,1.0,1.0,0.2 ];
-var indexVertex=[0,1,3, 2,3,1];
+                -1,-1,-1,  1,-1,-1,  1, 1,-1, -1, 1,-1];
+var colorCube=[1.0,0.2,0.2,1.0, 0.2,0.2,0.2,1.0, 0.2,0.2,0.2,1.0, 0.2,0.2,0.2,1.0,
+               0.2,0.2,0.2,1.0, 0.2,0.2,0.2,1.0, 0.2,0.2,0.2,1.0, 0.2,0.2,0.2,1.0];
+var indexCube=[0,1, 1,2, 2,3, 3,0,
+               4,5, 5,6, 6,7, 7,4,
+               0,4, 1,5, 2,6, 3,7 ];
+               
+
 // a->-b
 // |   |
 // d-<-c
@@ -114,7 +115,7 @@ function draw3DSlip(){
 			
 			//indexSlip[6*k  ]=4*k  ; indexSlip[6*k+1]=4*k+1; indexSlip[6*k+2]=4*k+3;
 			//indexSlip[6*k+3]=4*k+2; indexSlip[6*k+4]=4*k+3; indexSlip[6*k+5]=4*k+1;
-			indexSlip= indexSlip.concat( indexVertex.map((x) => x + 4*k) );
+			indexSlip= indexSlip.concat( indexGround.map((x) => x + 4*k) );
 			k++;
 			//var latlngs = [p1,p2,p3,p4];
 			//		slipGroup[ i+j*variables['Invs']['Nx'] ] = L.polygon(latlngs, { fillColor: `rgb(${r}, ${g}, ${b})`,color: strokeColor,weight: weight, fillOpacity: .75, pane: 'slip' }).bindPopup(`${variable}: ${arraySlip[j][i][variable]}<br>Lat: ${pos.lat}<br>lng: ${pos.lng}<br>Z: ${Z}`).addTo(map);
@@ -122,51 +123,91 @@ function draw3DSlip(){
 			}
 		}
 		//vertexSlip= vertexSlip.concat(vertexCube.map((x) => 1.1*x));
+		let c=Math.cos(-Rot*Math.PI/180.0);
+		let s=Math.sin(-Rot*Math.PI/180.0);
 		let maxn=Math.max(nx,ny,nz);
-		for(let i=0;i<vertexCube.length/3;i++){
+		for(let i=0;i<vertexGround.length/3;i++){
+			let x=1.5*vertexGround[3*i];
+			let y=1.5*vertexGround[3*i+1];
+			let z=1.1*vertexGround[3*i+2];
 			/*vertexSlip= vertexSlip.concat(
 				[vertexCube[3*i]*nx/maxXYZ,
 				vertexCube[3*i+1]*ny/maxXYZ,
 				vertexCube[3*i+2]*nz/maxXYZ]);*/
 			vertexSlip= vertexSlip.concat(
-				[vertexCube[3*i]*1.1,
-				vertexCube[3*i+1]*1.1,
-				vertexCube[3*i+2]*1.1]);
+				[x*c-y*s,
+				y*c+x*s,
+				z]);
 		}
-		colorSlip= colorSlip.concat(colorCube);
-		indexSlip= indexSlip.concat( indexVertex.map((i) => i + 4*k) );
+		var vertexCubeRotate=[];
+		
+		for(let i=0;i<vertexCube.length/3;i++){
+			let x=1.5*vertexCube[3*i];
+			let y=1.5*vertexCube[3*i+1];
+			let z=1.1*vertexCube[3*i+2];
+			vertexCubeRotate[3*i] = x*c-y*s;
+			vertexCubeRotate[3*i+1] = y*c+x*s;
+			vertexCubeRotate[3*i+2] = z;
+		}
+		colorSlip= colorSlip.concat(colorGround);
+		indexSlip= indexSlip.concat( indexGround.map((i) => i + 4*k) );
+		
+		
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, vertexSlip_buffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexSlip), gl.DYNAMIC_DRAW);
+		gl.bindBuffer(gl.ARRAY_BUFFER, null);
+	
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, colorSlip_buffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorSlip), gl.DYNAMIC_DRAW);
+		gl.bindBuffer(gl.ARRAY_BUFFER, null);
+	
+		
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexSlip_buffer);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexSlip), gl.DYNAMIC_DRAW);
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+		
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, vertexCube_buffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexCubeRotate), gl.DYNAMIC_DRAW);
+		gl.bindBuffer(gl.ARRAY_BUFFER, null);
+	
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, colorCube_buffer);
+		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorCube), gl.DYNAMIC_DRAW);
+		gl.bindBuffer(gl.ARRAY_BUFFER, null);
+	
+		
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexCube_buffer);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexCube), gl.DYNAMIC_DRAW);
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+		/*
 		indexSlip= indexSlip.concat( indexVertex.map((i) => i + 4*(k+1)) );
 		indexSlip= indexSlip.concat( indexVertex.map((i) => i + 4*(k+2)) );
 		indexSlip= indexSlip.concat( indexVertex.map((i) => i + 4*(k+3)) );
 		indexSlip= indexSlip.concat( indexVertex.map((i) => i + 4*(k+4)) );
 		indexSlip= indexSlip.concat( indexVertex.map((i) => i + 4*(k+5)) );
+		*/
 		//console.log(indexSlip)
 		
 
 		
-		vertexSlip_buffer = gl.createBuffer ();
-		gl.bindBuffer(gl.ARRAY_BUFFER, vertexSlip_buffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexSlip), gl.DYNAMIC_DRAW);
-	
-		colorSlip_buffer = gl.createBuffer ();
-		gl.bindBuffer(gl.ARRAY_BUFFER, colorSlip_buffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colorSlip), gl.DYNAMIC_DRAW);
-	
-		indexSlip_buffer = gl.createBuffer ();
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexSlip_buffer);
-		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indexSlip), gl.DYNAMIC_DRAW);
 		
-		gl.bindBuffer(gl.ARRAY_BUFFER, vertexSlip_buffer);
-		var _position = gl.getAttribLocation(shaderprogram, "position");
-		gl.vertexAttribPointer(_position, 3, gl.FLOAT, false,0,0);
-		gl.enableVertexAttribArray(_position);
+		
+		/*
+		gl.bindBuffer(gl.ARRAY_BUFFER, vertexCube_buffer);
+		var _Cubeposition = gl.getAttribLocation(shaderprogram, "position");
+		gl.vertexAttribPointer(_Cubeposition, 3, gl.FLOAT, false,0,0);
+		gl.enableVertexAttribArray(_Cubeposition);
 	
-		gl.bindBuffer(gl.ARRAY_BUFFER, colorSlip_buffer);
-		var _color = gl.getAttribLocation(shaderprogram, "color");
-		gl.vertexAttribPointer(_color, 4, gl.FLOAT, false,0,0) ;
-		gl.enableVertexAttribArray(_color);
+		gl.bindBuffer(gl.ARRAY_BUFFER, colorCube_buffer);
+		var _Cubecolor = gl.getAttribLocation(shaderprogram, "color");
+		gl.vertexAttribPointer(_Cubecolor, 4, gl.FLOAT, false,0,0) ;
+		gl.enableVertexAttribArray(_Cubecolor);
+		
 		gl.useProgram(shaderprogram);
-
+*/
 /*		
 		let k=0;
 		for(let j=0;j<Nz-1;j++){
@@ -271,6 +312,17 @@ function draw3DSlip(){
 	gl.enableVertexAttribArray(_color);
 	*/
 	gl.useProgram(shaderprogram);
+//	gl.useProgram(shaderprogram);
+		
+	var _position = gl.getAttribLocation(shaderprogram, "position");
+	var _color = gl.getAttribLocation(shaderprogram, "color")
+	
+	vertexSlip_buffer = gl.createBuffer ();
+	colorSlip_buffer = gl.createBuffer ();
+	indexSlip_buffer = gl.createBuffer ();
+	vertexCube_buffer = gl.createBuffer ();
+	colorCube_buffer = gl.createBuffer ();
+	indexCube_buffer = gl.createBuffer ();;
 	
 	/*==================== MATRIX ====================== */
 	
@@ -329,7 +381,7 @@ function draw3DSlip(){
 }
 			
 			
-			canvas.addEventListener("mousedown", mouseDown, false);
+	canvas.addEventListener("mousedown", mouseDown, false);
 	canvas.addEventListener("mouseup", mouseUp, false);
 	canvas.addEventListener("mouseout", mouseUp, false);
 	canvas.addEventListener("mousemove", mouseMove, false);
@@ -400,8 +452,8 @@ function draw3DSlip(){
 			-nx/maxn,  ny/maxn,-nz/maxn, -nx/maxn,  ny/maxn, nz/maxn,  nx/maxn, ny/maxn, nz/maxn,  nx/maxn, ny/maxn,-nz/maxn, 
 		];
 		//var vertex_buffer = gl.createBuffer ();
-		gl.bindBuffer(gl.ARRAY_BUFFER, vertexSlip_buffer);
-		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexSlip), gl.DYNAMIC_DRAW);
+		//gl.bindBuffer(gl.ARRAY_BUFFER, vertexSlip_buffer);
+		//gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexSlip), gl.DYNAMIC_DRAW);
 		//bindAttributes();
 		//gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
 		//gl.bufferSubData(gl.ARRAY_BUFFER, 12*6*sizeOfFloat, vertices);
@@ -433,7 +485,7 @@ function draw3DSlip(){
 		zoom(mo_matrix, SCALE);
 		
 		time_old = time; 
-		//gl.enable(gl.DEPTH_TEST);
+		gl.enable(gl.DEPTH_TEST);
 		
 		// gl.depthFunc(gl.LEQUAL);
 		
@@ -447,8 +499,34 @@ function draw3DSlip(){
 		gl.uniformMatrix4fv(_Vmatrix, false, view_matrix);
 		gl.uniformMatrix4fv(_Mmatrix, false, mo_matrix);
 		
+		
+		
+		gl.enableVertexAttribArray(_position);
+		gl.enableVertexAttribArray(_color);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, vertexSlip_buffer);
+		gl.vertexAttribPointer(_position, 3, gl.FLOAT, false,0,0);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, colorSlip_buffer);
+		gl.vertexAttribPointer(_color, 4, gl.FLOAT, false,0,0) ;
+		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexSlip_buffer);
 		gl.drawElements(gl.TRIANGLES, indexSlip.length, gl.UNSIGNED_SHORT, 0);
+		
+		
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, vertexCube_buffer);
+		gl.vertexAttribPointer(_position, 3, gl.FLOAT, false,0,0);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, colorCube_buffer);
+		gl.vertexAttribPointer(_color, 4, gl.FLOAT, false,0,0) ;
+		
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexCube_buffer);
+		gl.drawElements(gl.LINES, indexCube.length, gl.UNSIGNED_SHORT, 0);
+		
+		//gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexCube_buffer);
+		//gl.drawElements(gl.LINES, indexCube.length, gl.UNSIGNED_SHORT, 0);
+		
 		//console.log(nx)
 		
 		//window.requestAnimationFrame(animate);

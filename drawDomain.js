@@ -116,7 +116,7 @@ class DomCell {
 		this.theta = theta;
 		this.dx=dx;
 		this.dy=dy;
-
+		
 		this.latN=Origin.lat+0.5*this.dy;
 		this.latS=Origin.lat-0.5*this.dy;
 		this.lngE=Origin.lng+0.5*this.dx;
@@ -126,7 +126,7 @@ class DomCell {
 		//console.log("Rot:",this.Rot,"Origin:",this.Origin,"lat0:",this.lat0,this.latN);
 	}
 	
-	ij2cell(i,j,label){
+	ij2cell(i,j,label,color='green'){
 		const latN = this.latN + (j-1)*this.dy;
 		const latS = this.latS + (j-1)*this.dy;
 		const lngE = this.lngE + (i-1)*this.dx;
@@ -137,7 +137,7 @@ class DomCell {
 				rotPoint( this.Rot, new L.LatLng( latN, lngE ), this.theta),
 				rotPoint( this.Rot, new L.LatLng( latN, lngO ), this.theta)
 		];
-		return L.polygon(inilatlngs, {color: 'green', pane: 'celdas'}).bindPopup(label+`<br>(${i},${j})`).addTo(map);
+		return L.polygon(inilatlngs, {color: color, pane: 'celdas'}).bindPopup(label+`<br>(${i},${j})`).addTo(map);
 	}
 	
 	latlng2ij(lat,lng){
@@ -181,7 +181,7 @@ function drawDomain(){
 		lng0=lngRot-0.5*ndx+0.5*dx;
 		let Points= new DomCell( new L.LatLng(latRot, lngRot), new L.LatLng(lat0, lng0), theta,dx,dy);
 
-		cells.push( Points.ij2cell( 1, 1, `Origen<br>Lat: ${lat0}<br>lng: ${lng0}`) );
+		cells.push( Points.ij2cell( 1, 1, `Origen<br>Lat: ${lat0}<br>lng: ${lng0}`,'red') );
 		cells.push( Points.ij2cell( nx, 1, 'Fin X') );
 		cells.push( Points.ij2cell( 1, ny, 'Fin Y') );
 		cells.push( Points.ij2cell( nx, ny, 'Fin X Y') );
