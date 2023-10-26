@@ -501,6 +501,17 @@ function draw3DSlip(){
 		
 		
 		
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, vertexCube_buffer);
+		gl.vertexAttribPointer(_position, 3, gl.FLOAT, false,0,0);
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, colorCube_buffer);
+		gl.vertexAttribPointer(_color, 4, gl.FLOAT, false,0,0) ;
+		
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexCube_buffer);
+		gl.drawElements(gl.LINES, indexCube.length, gl.UNSIGNED_SHORT, 0);
+		
+		
 		gl.enableVertexAttribArray(_position);
 		gl.enableVertexAttribArray(_color);
 		
@@ -512,18 +523,6 @@ function draw3DSlip(){
 		
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexSlip_buffer);
 		gl.drawElements(gl.TRIANGLES, indexSlip.length, gl.UNSIGNED_SHORT, 0);
-		
-		
-		
-		gl.bindBuffer(gl.ARRAY_BUFFER, vertexCube_buffer);
-		gl.vertexAttribPointer(_position, 3, gl.FLOAT, false,0,0);
-		
-		gl.bindBuffer(gl.ARRAY_BUFFER, colorCube_buffer);
-		gl.vertexAttribPointer(_color, 4, gl.FLOAT, false,0,0) ;
-		
-		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexCube_buffer);
-		gl.drawElements(gl.LINES, indexCube.length, gl.UNSIGNED_SHORT, 0);
-		
 		//gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexCube_buffer);
 		//gl.drawElements(gl.LINES, indexCube.length, gl.UNSIGNED_SHORT, 0);
 		

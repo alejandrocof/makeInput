@@ -24,38 +24,38 @@
 			<div>
 				<!--input type="file" id="openFile" accept=".fsp" style="margin-bottom:10px" /-->
 				<!--input type="file" id="openFile" accept=".fsp" style="margin-top:10px"/-->
-				<input type="file" id="openFile" accept=".fsp" style="margin:10px"/>
+				<input type="file" id="openFile" accept=".fsp" style="width: 90%; margin:10px"/>
 			</div>
 			<hr>
 			<div>
 				<label id="idNTLabel" >NT:
 					<input id="idNTNumber" type="number" min=1 max=10000 step=1 style="width: 4em"/>
-					<input id="idNTInput" type="range" min=1 max=10000 step=1>
+					<input id="idNTInput" type="range" min=1 max=10000 step=1 style="width: 60%">
 				</label>
 			</div>
 			<div>
 				<label>DT:
 				<input id="idDTNumber" type="number" min=0.001 max=1 step=0.001 style="width: 4em"/>
-				<input id="idDTInput" type="range" min=0.001 max=1 step=0.001>
+				<input id="idDTInput" type="range" min=0.001 max=1 step=0.001 style="width: 60%">
 				</label>
 			</div>
 			<hr>
 			<div>
 				<label>nx:
 					<input id="idNxNumber" type="number" min=1 max=2000 step=1 style="width: 4em"/>
-					<input id="idNxInput" type="range" min=1 max=2000 step=1>
+					<input id="idNxInput" type="range" min=1 max=2000 step=1 style="width: 60%">
 				</label>
 			</div>
 			<div>
 				<label>ny:
 					<input id="idNyNumber" type="number" min=1 max=2000 step=1 style="width: 4em"/>
-					<input id="idNyInput" type="range" min=1 max=2000 step=1>
+					<input id="idNyInput" type="range" min=1 max=2000 step=1 style="width: 60%">
 				</label>
 			</div>
 			<div>
 				<label>nz:
 					<input id="idNzNumber" type="number" min=1 max=2000 step=1 style="width: 4em"/>
-					<input id="idNzInput" type="range" min=1 max=2000 step=1>
+					<input id="idNzInput" type="range" min=1 max=2000 step=1 style="width: 60%">
 				</label>
 			</div>
 			<div>
@@ -63,26 +63,26 @@
 					<input id="idDHNumber" type="number" min=0 max=3000 step=1 style="width: 4em"/>
 				</label>
 				<label>m
-					<input id="idDHInput" type="range" min=0 max=3000 step=1>
+					<input id="idDHInput" type="range" min=0 max=3000 step=1 style="width: 52%">
 				</label>
 			</div>
 			<hr>
 			<div>
 				<label>ngx:
 					<input id="idNgxNumber" type="number" min=1 max=16 step=1 style="width: 4em"/>
-					<input id="idNgxInput" type="range" min=1 max=16 step=1>
+					<input id="idNgxInput" type="range" min=1 max=16 step=1 style="width: 60%">
 				</label>
 			</div>
 			<div>
 				<label>ngy:
 					<input id="idNgyNumber" type="number" min=1 max=16 step=1 style="width: 4em"/>
-					<input id="idNgyInput" type="range" min=1 max=16 step=1>
+					<input id="idNgyInput" type="range" min=1 max=16 step=1 style="width: 60%">
 				</label>
 			</div>
 			<div>
 				<label>ngz:
 					<input id="idNgzNumber" type="number" min=1 max=16 step=1 style="width: 4em"/>
-					<input id="idNgzInput" type="range" min=1 max=16 step=1>
+					<input id="idNgzInput" type="range" min=1 max=16 step=1 style="width: 60%">
 				</label>
 			</div>
 			<hr>
@@ -90,17 +90,17 @@
 				Rotación del dominio:<br>
 				<label>Theta:
 					<input id="idRotNumber" type="number" min=0 max=360 step=0.1 style="width: 4em"/>
-					<input id="idRotInput" type="range" min=0 max=360 step=0.1><br>
+					<input id="idRotInput" type="range" min=0 max=360 step=0.1  style="width: 55%"><br>
 				</label>
 				<div id="idStrike" >STRIKE (fsp): </div>
 				<div id="idStr" >STR (input): </div>
 			</div>
 			<hr>
-			<div>
-				<canvas id = "my_Canvas"></canvas>
+			<div id="idDivCanva">
+				<canvas id = "my_Canvas" height='200' width='300'></canvas>
 			</div>
 			<hr>
-			<div id="contentDiv">
+			<div id="contentDiv" height='100%' width='300'>
 				<h3>input:</h3>
 				<pre id="idFileInputPre"></pre>
 			</div>

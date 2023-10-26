@@ -18,7 +18,7 @@ var Nz=0;
 file.addEventListener("change", function () {
 	var reader = new FileReader();
 	fileback=file.files[0];
-	file.value=""
+	//file.value=""
 	reader.onload = function (progressEvent) {
 		let i=0;
 		let j=0;
